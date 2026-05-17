@@ -14,6 +14,29 @@ export default function SellCar() {
     title: "", brand: "", model: "", year: "", kms: "", fuelType: "Petrol", transmission: "Manual", mileage: "", ownership: "1st Owner", bodyType: "SUV", location: "", price: "", description: "", condition: "Good"
   });
   const [valuation, setValuation] = useState<{min: string, max: string} | null>(null);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const files = Array.from(e.target.files);
+    
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setSelectedImages(prev => [...prev, reader.result as string]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleRemoveImage = (index: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedImages(prev => prev.filter((_, i) => i !== index));
+  };
+
 
   const getValuation = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,8 +76,7 @@ export default function SellCar() {
         ownership: formData.ownership,
         location: formData.location,
         bodyType: formData.bodyType,
-        description: formData.description,
-        images: ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&q=80&w=800"], // Placeholder
+        images: selectedImages.length > 0 ? selectedImages : ["https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&q=80&w=800"], // Use selected photos
         features: ["Sunroof", "ABS", "Airbags"]
       };
 
@@ -218,10 +240,41 @@ export default function SellCar() {
 
                 <div className="space-y-6">
                   {/* Upload Photos */}
-                  <div className="border-2 border-dashed border-border rounded-2xl p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-input/50">
-                    <UploadCloud className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-foreground font-medium mb-1">Click to upload car photos</h3>
-                    <p className="text-xs text-muted-foreground">Upload up to 10 high-quality images (PNG, JPG)</p>
+                  <div className="space-y-4">
+                    <div 
+                      onClick={() => document.getElementById('car-photo-upload')?.click()}
+                      className="border-2 border-dashed border-border rounded-2xl p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-input/50 relative"
+                    >
+                      <input 
+                        type="file" 
+                        id="car-photo-upload" 
+                        accept="image/*" 
+                        multiple 
+                        className="hidden" 
+                        onChange={handleFileChange}
+                      />
+                      <UploadCloud className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-foreground font-medium mb-1">Click to upload car photos</h3>
+                      <p className="text-xs text-muted-foreground">Upload up to 10 high-quality images (PNG, JPG)</p>
+                    </div>
+
+                    {/* Previews */}
+                    {selectedImages.length > 0 && (
+                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 p-4 bg-background border border-border rounded-2xl">
+                        {selectedImages.map((img, idx) => (
+                          <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group border border-border">
+                            <Image src={img} alt={`Preview ${idx + 1}`} fill className="object-cover" />
+                            <button
+                              onClick={(e) => handleRemoveImage(idx, e)}
+                              className="absolute top-1 right-1 w-6 h-6 rounded-full bg-destructive text-white flex items-center justify-center text-xs opacity-90 hover:opacity-100 hover:scale-105 transition-all shadow-md"
+                              type="button"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-5">
