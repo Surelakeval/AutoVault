@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Filter, Search, ChevronDown, SlidersHorizontal } from "lucide-react";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import { fetchAPI } from "@/lib/api";
 
 import { useSearchParams } from "next/navigation";
 
-export default function BrowseCars() {
+function BrowseCarsContent() {
   const searchParams = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [cars, setCars] = useState<any[]>([]);
@@ -249,6 +249,14 @@ export default function BrowseCars() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function BrowseCars() {
+  return (
+    <Suspense fallback={<div className="container mx-auto px-4 py-8 text-center text-muted-foreground animate-pulse">Loading browse page...</div>}>
+      <BrowseCarsContent />
+    </Suspense>
   );
 }
 

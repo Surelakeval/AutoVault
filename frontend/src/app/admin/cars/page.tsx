@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchAPI } from "@/lib/api";
-import { Plus, Edit, Trash2, Search, MoreVertical } from "lucide-react";
+import { Plus, Edit, Trash2, Search, MoreVertical, Car } from "lucide-react";
 import Image from "next/image";
 
 export default function AdminCars() {

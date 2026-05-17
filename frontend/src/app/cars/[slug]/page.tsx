@@ -133,7 +133,7 @@ export default function CarDetails() {
                 </div>
               </div>
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                {car.images.map((img, idx) => (
+                {car.images.map((img: string, idx: number) => (
                   <button 
                     key={idx} 
                     onClick={() => setActiveImage(idx)}
@@ -175,7 +175,7 @@ export default function CarDetails() {
               
               <h2 className="text-2xl font-bold text-foreground mb-4">Top Features</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-2">
-                {car.features.map((feature, idx) => (
+                {car.features.map((feature: string, idx: number) => (
                   <div key={idx} className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
                     <span className="text-foreground">{feature}</span>

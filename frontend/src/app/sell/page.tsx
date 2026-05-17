@@ -11,7 +11,7 @@ export default function SellCar() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    title: "", brand: "", model: "", year: "", kms: "", fuelType: "Petrol", transmission: "Manual", mileage: "", ownership: "1st Owner", bodyType: "SUV", location: "", price: "", description: ""
+    title: "", brand: "", model: "", year: "", kms: "", fuelType: "Petrol", transmission: "Manual", mileage: "", ownership: "1st Owner", bodyType: "SUV", location: "", price: "", description: "", condition: "Good"
   });
   const [valuation, setValuation] = useState<{min: string, max: string} | null>(null);
 
